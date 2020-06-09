@@ -48,6 +48,7 @@ async def on_guild_remove(guild):
         json.dump(prefixes, f, indent = 4)
 
 @client.command()
+@commands.has_permissions(administrator = True)
 async def changeprefix(ctx, prefix):
     global BOT_PREFIX
     BOT_PREFIX = prefix
@@ -57,8 +58,9 @@ async def changeprefix(ctx, prefix):
     with open('prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent = 4)
     await ctx.send(f"""My prefix was successfully changed to '{prefix}'""")
+    print(f"""{ctx.author} changed the bot prefix to {prefix}""")
 
-statuses = cycle([
+statuses = cycle([ 
     f"for {BOT_PREFIX}help",
     "on my own",
     f"for {BOT_PREFIX}help",
@@ -104,6 +106,7 @@ async def on_member_update(before, after):
 async def on_ready():   
     change_status.start()
     #await client.change_presence(status = discord.Status.idle) activity = discord.Game(" with your feelings.")) #removed after the command was updated over time automatically.
+    print("Bot Ready!")
     print("Logged in as " + client.user.name)
     #await client.guild.channel.send("I am up if anyone needs me.")
 
@@ -120,12 +123,15 @@ async def on_member_join(member):
     for channel in member.guild.channels:
         if str(channel) == "general":
             await channel.send(f"""Welcome {member.mention}""")
+    print(f"""Member, {member}, entered the server.""")
 
 @client.event
 async def on_member_remove(member):
     for channel in member.guild.channels:
         if str(channel) == "general":
             await channel.send(f"""{member.mention} has left the server""")
+    print(f"""Member, {member}, left the server.""")
+    
 
 @client.command(aliases = ['hi', 'hey', 'hola', 'greetings','namaste', 'namaskar'])
 async def hello(ctx):
@@ -139,6 +145,8 @@ async def hello(ctx):
         'Namaskar '
     ]
     await ctx.send(random.choice(possible_responses) + f"""{ctx.author.mention}""")
+    print(f"""User, {ctx.author}, greeted.""")
+
 
 @client.command(aliases = ['adios', 'byebye','byeee', 'byee'])
 async def bye(ctx):
@@ -153,6 +161,9 @@ async def bye(ctx):
         'Goodbye!! '
     ]
     await ctx.send(random.choice(possible_responses) + f"""{ctx.author.mention}""")
+    print(f"""User, {ctx.author}, bid goodbye.""")
+
+
 @client.command(aliases = ['hehe','hahaha','lol','rofl','lul','lel','lmao','hehehe'])
 async def haha(ctx):
     possible_response = [
@@ -161,6 +172,7 @@ async def haha(ctx):
         'Haha stop it, you dont wanna hear a bot laugh'
     ]
     await ctx.send(random.choice(possible_response))
+    print(f"""User, {ctx.author}, laughed.""")
 
 
 
@@ -178,7 +190,7 @@ async def ping(ctx):
         await ctx.send(f"""Ping is = {round(client.latency * 1000)} ms.""")    
     else:
         await ctx.send(response + f"""  Just kidding , ping is = {round(client.latency * 1000)} ms.""")
-    print("pinged")
+    print(f"""User, {ctx.author}, checked ping to be {round(client.latency * 1000)}.""")
 
 @client.command()
 async def connect(ctx, *, channel: discord.VoiceChannel = None):
@@ -192,6 +204,7 @@ async def connect(ctx, *, channel: discord.VoiceChannel = None):
     else:
         await channel.connect()
     await ctx.send(f'Connected to: **{channel}**', delete_after=20)
+    print(f"""User, {ctx.author}, connected bot to voice channel.""")
 
 # @client.command()
 # async def leave(ctx):
@@ -232,8 +245,6 @@ async def leave(ctx):
 
 #     player = players[ctx.guild.id]
 
-#         # If download is False, source will be a dict which will be used later to regather the stream.
-#         # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
 #     source = await YTDLSource.create_source(ctx, search, loop=bot.loop, download=False)
 
 #     await player.queue.put(source)
@@ -266,6 +277,7 @@ async def ask(ctx, *, question):
         'Very much!'
     ]
     await ctx.send(f"""Question: {question}\n Answer: {random.choice(reply)}""")
+    print(f"""User, {ctx.author}, asked a question.""")
 
 @client.command()
 async def roast(ctx, *, member):
@@ -340,7 +352,10 @@ async def roast(ctx, *, member):
         'Want a roast? ,',
         'Anyone said roast? ,'
     ]
+
     await ctx.send(f"""{random.choice(formality)} \n {random.choice(roasts)}""")
+    print(f"""User, {ctx.author}, roasted {member}.""")
+
 
 @client.command(aliases = ['funfacts'])
 async def funfact(ctx):
@@ -566,6 +581,8 @@ async def funfact(ctx):
         'Want a fun fact? ,'
     ]
     await ctx.send(f"""{random.choice(formality)} \n {random.choice(fun_facts)}""")
+    print(f"""User, {ctx.author}, asked for a fun fact.""")
+
 
 @client.command(aliases = ['jokes', 'fun', 'funny'])
 async def joke(ctx):
@@ -638,6 +655,7 @@ async def joke(ctx):
         "Come have a laugh off ,"
     ]
     await ctx.send(f"""{random.choice(formality)} \n\n {random.choice(jokes_list)}""")
+    print(f"""User, {ctx.author}, asked for a joke.""")
 
 @client.command(alaises = ['riddles'])
 async def riddle(ctx):
@@ -752,6 +770,8 @@ async def riddle(ctx):
         "twist your brain a bit,"
     ]
     await ctx.send(f"""{random.choice(formality)} \n\n {random.choice(riddles_list)}""")
+    print(f"""User, {ctx.author}, asked for a riddle.""")
+
 
 @client.command()
 async def twister(ctx):
@@ -849,6 +869,8 @@ async def twister(ctx):
         "twist your tongue a bit,"
     ]
     await ctx.send(f"""{random.choice(formality)} \n\n {random.choice(twisters_list)}""")
+    print(f"""User, {ctx.author}, asked for a tongue twister.""")
+
 
 @client.command(aliases = ['coin', 'coinflip', 'flipcoin'])
 async def flip(ctx):
@@ -856,12 +878,17 @@ async def flip(ctx):
         "HEADS",
         "TAILS"
     ]
-    await ctx.send(f"""{ctx.author.mention} flipped {random.choice(outcomes)}""")
+    selection = random.choice(outcomes)
+    await ctx.send(f"""{ctx.author.mention} flipped {selection}""")
+    print(f"""User, {ctx.author}, flipped {selection}.""")
+
 
 @client.command(aliases = ['roll', 'rolldice', 'diceroll'])
 async def dice(ctx):
     outcomes = range(1, 7)
-    await ctx.send(f"""{ctx.author.mention} rolled {random.choice(outcomes)}""")
+    selection = random.choice(outcomes)
+    await ctx.send(f"""{ctx.author.mention} rolled {selection}""")
+    print(f"""User, {ctx.author}, rolled {selection}.""")
 
 @client.command()
 async def ran(ctx, number = 100):
@@ -873,7 +900,9 @@ async def ran(ctx, number = 100):
         'Random selection ',
         'Random generated as '
     ]
-    await ctx.send(f"""{ctx.author.mention} ,\n{random.choice(formality)}: {random.choice(list_possible_outcome)}""")
+    selection = random.choice(list_possible_outcome)
+    await ctx.send(f"""{ctx.author.mention} ,\n{random.choice(formality)}: {selection}""")
+    print(f"""User, {ctx.author}, randomed {selection}.""")
 
 @client.command(aliases = ['giggle', 'chuckle'])
 async def laugh(ctx):
@@ -891,34 +920,27 @@ async def laugh(ctx):
         'this is the most I have ever laughed'
     ]
     await ctx.send(f"""{random.choice(laugh_patterns)} {random.choice(tail)}""")
+    print(f"""User, {ctx.author}, asked to laugh.""")
 
 @client.command()
 @commands.has_permissions(manage_messages = True)
 async def clear(ctx, amount = 1):
     await ctx.channel.purge(limit = amount + 1)
-
-def is_it_me(ctx):
-    return ctx.author.id  == 339564758133112844
+    print(f"""User, {ctx.author}, cleared {amount} messages.""")
 
 @client.command()
-@commands.check(is_it_me)
-async def example(ctx):
-    await ctx.send (f"""Hi i am {ctx.author}""")
-
-
-@client.command()
-@commands.has_permissions(kick_members = True)
+@commands.has_permissions(kick_members = True)  
 async def kick(ctx, member : discord.Member, *, reason = None):
     await member.kick(reason = reason)
     await ctx.send(f"""{member.mention} was kicked by {ctx.author}. \n Reason: {reason}""")
+    print(f"""{ctx.author} kicked {member}. Reason: {reason}""")
 
 @client.command()
 @commands.has_permissions(ban_members = True)
 async def ban(ctx, member : discord.Member, *, reason = None):
     await member.ban(reason = reason)
     await ctx.send(f"""{member.mention} was banned by {ctx.author}. \n Reason: {reason}""")
-
-
+    print(f"""{ctx.author} banned {member}. Reason: {reason}""")
 
 @client.command()
 @commands.has_permissions(ban_members = True)
@@ -931,6 +953,7 @@ async def unban(ctx, *, member):
             await ctx.guild.unban(user)
             await ctx.send(f"""Unbanned {user.name}#{user.discriminator}""")
             return
+
 @client.command()
 async def users(ctx):
     formality = [
@@ -940,12 +963,14 @@ async def users(ctx):
         'Number of users here '
     ]
     await ctx.send(f"""{random.choice(formality)} = {ctx.guild.member_count}""")
+    print(f"""{ctx.author} checked user count to be {ctx.guild.member_count}""")
 
 @client.remove_command("help")
 
 @client.command()
 async def help(ctx):
-    print("Help called!")
+    print(f"""{ctx.author} called for help.""")
+
 @client.event
 async def on_message(message):
     global messages
@@ -983,7 +1008,8 @@ async def on_message(message):
         embed.add_field(name = "!riddle", value = "Provides a Riddle")
         embed.add_field(name = "!twister", value = "Provides a tongue twister")
         embed.add_field(name = "!clear value", value = "Clears the number of message in the channel, 1 will be the default")
-        embed.add_field(name = "!ran value", value = "Creates a random number within giver value, 100 will be the default")
+        embed.add_field(name = "!ran value", value = "Creates a random number within given value, 100 will be the default")
+        embed.add_field(name = "!ask question", value = "Answers the yes/no question.")
         await message.channel.send(content = None, embed = embed)
         embed_1 = discord.Embed(title = "", description = "Do not try to change nickname to mine (sanity ) And \n Do not use rough languages here please. Thankyou.", colour=discord.Colour.red())
         await message.channel.send(content = None, embed = embed_1)
