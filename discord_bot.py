@@ -107,9 +107,9 @@ async def on_ready():
     print("Logged in as " + client.user.name)
     #await client.guild.channel.send("I am up if anyone needs me.")
 
-@tasks.loop(seconds = 5)
+@tasks.loop(seconds = 30)
 async def change_status():
-    await client.change_presence(status = discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name= next(statuses)))
+    await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = next(statuses)))
     #await client.change_presence(status = discord.Status.idle, activity = discord.Streaming(next(status)))
 
 
@@ -462,56 +462,101 @@ async def funfact(ctx):
         "Certain frogs that can survive the experience of being frozen.",
         "Only humans sleep on their backs.",
         "The human brain is 80% water.",
-        "Everyone's tongue print is different."
-        "As an adult, you have more than 20 square feet of skin on your body--about the same square footage as a blanket for a queen-sized bed."
-        "In your lifetime, you'll shed over 40 pounds of skin."
-        "15 million blood cells are produced and destroyed in the human body every second."
-        "Every minute, 30-40,000 dead skin cells fall from your body."
-        "The brain uses more than 25% of the oxygen used by the human body."
-        "If your mouth was completely dry, you would not be able to distinguish the taste of anything."
-        "There are more living organisms on the skin of a single human being than there are human beings on the surface of the earth."
-        "Muscles are made up of bundles from about 5 in the eyelid to about 200 in the buttock muscle."
-        "Muscles in the human body (640 in total) make up about half of the body weight."
-        "The human body has enough fat to produce 7 bars of soap."
-        "The human head is a quarter of our total length at birth, but only an eighth of our total length by the time we reach adulthood."
-        "Most people blink about 17,000 times a day."
-        "Moths have no stomach."
-        "Hummingbirds can't walk."
-        "Sea otters have 2 coats of fur."
-        "A starfish can turn its stomach inside out."
-        "A zebra is white with black stripes."
-        "The animal with the largest brain in relation to its body is the ant."
-        "The largest eggs in the world are laid by a shark."
-        "A crocodile’s tongue is attached to the roof of its mouth."
-        "Crocodiles swallow stones to help them dive deeper."
-        "Giraffes are unable to cough."
-        "Sharks are immune to cancer."
-        "Despite the hump, a camel’s spine is straight."
-        "Cheetah's can accelerate from 0 to 70 km/h in 3 seconds."
-        "A giraffe's neck contains the same number of vertebrae as a human."
-        "The heart of giraffe is two feet long, and can weigh as much as twenty four pounds."
-        "On average, Elephants sleep for about 2 hours per day."
-        "Lobsters have blue blood."
-        "Shark's teeth are literally as hard as steel."
-        "A mosquito has 47 teeth."
-        "Oxygen, carbon, hydrogen and nitrogen make up 90% of the human body."
-        "Seventy percent of the dust in your home consists of shed human skin"
-        "Fish are the only vertebrates that outnumber birds."
-        "A cockroach can live for several weeks without its head."
-        "The average human produces a quart of saliva a day -- about 10,000 gallons in a lifetime"
-        "Elephants have been known to remain standing after they die."
-        "The embryos of tiger sharks fight each other while in their mother's womb, the survivor being the baby shark that is born."
-        "Ants do not sleep."
-        "Nearly a third of all bottled drinking water purchased in the US is contaminated with bacteria."
-        "Rats multiply so quickly that in 18 months, two rats could have over 1 million descendents."
-        "An Astronaut can be up to 2 inches taller returning from space. The cartilage disks in the spine expand in the absence of gravity."
-        "The oldest known fossil is of a single-celled organism, blue-green algae, found in 3.2 billion year-old stones in South Africa."
-        "The oldest multicellular fossils date from ~700 million years ago."
-        "The earliest cockroach fossils are about 280 million years old."
-        "Healthy nails grow about 2 cm each year. Fingernails grow four times as fast as toenails."
-        "20/20 vision means the eye can see normally at 20 feet. 20/15 is better; the eye can see at 20 feet what another eye sees at 15 feet."
-        "The average person has 100,000 hairs on his/her head. Each hair grows about 5 inches (12.7 cm) every year."
-        "There are 60,000 miles (97,000 km) in blood vessels in every human."
+        "Everyone's tongue print is different.",
+        "As an adult, you have more than 20 square feet of skin on your body--about the same square footage as a blanket for a queen-sized bed.",
+        "In your lifetime, you'll shed over 40 pounds of skin.",
+        "15 million blood cells are produced and destroyed in the human body every second.",
+        "Every minute, 30-40,000 dead skin cells fall from your body.",
+        "The brain uses more than 25% of the oxygen used by the human body.",
+        "If your mouth was completely dry, you would not be able to distinguish the taste of anything.",
+        "There are more living organisms on the skin of a single human being than there are human beings on the surface of the earth.",
+        "Muscles are made up of bundles from about 5 in the eyelid to about 200 in the buttock muscle.",
+        "Muscles in the human body (640 in total) make up about half of the body weight.",
+        "The human body has enough fat to produce 7 bars of soap.",
+        "The human head is a quarter of our total length at birth, but only an eighth of our total length by the time we reach adulthood.",
+        "Most people blink about 17,000 times a day.",
+        "Moths have no stomach.",
+        "Hummingbirds can't walk.",
+        "Sea otters have 2 coats of fur.",
+        "A starfish can turn its stomach inside out.",
+        "A zebra is white with black stripes.",
+        "The animal with the largest brain in relation to its body is the ant.",
+        "The largest eggs in the world are laid by a shark.",
+        "A crocodile’s tongue is attached to the roof of its mouth.",
+        "Crocodiles swallow stones to help them dive deeper.",
+        "Giraffes are unable to cough.",
+        "Sharks are immune to cancer.",
+        "Despite the hump, a camel’s spine is straight.",
+        "Cheetah's can accelerate from 0 to 70 km/h in 3 seconds.",
+        "A giraffe's neck contains the same number of vertebrae as a human.",
+        "The heart of giraffe is two feet long, and can weigh as much as twenty four pounds.",
+        "On average, Elephants sleep for about 2 hours per day.",
+        "Lobsters have blue blood.",
+        "Shark's teeth are literally as hard as steel.",
+        "A mosquito has 47 teeth.",
+        "Oxygen, carbon, hydrogen and nitrogen make up 90percent of the human body.",
+        "Seventy percent of the dust in your home consists of shed human skin",
+        "Fish are the only vertebrates that outnumber birds.",
+        "A cockroach can live for several weeks without its head.",
+        "The average human produces a quart of saliva a day -- about 10,000 gallons in a lifetime",
+        "Elephants have been known to remain standing after they die.",
+        "The embryos of tiger sharks fight each other while in their mother's womb, the survivor being the baby shark that is born.",
+        "Ants do not sleep.",
+        "Nearly a third of all bottled drinking water purchased in the US is contaminated with bacteria.",
+        "Rats multiply so quickly that in 18 months, two rats could have over 1 million descendents.",
+        "An Astronaut can be up to 2 inches taller returning from space. The cartilage disks in the spine expand in the absence of gravity.",
+        "The oldest known fossil is of a single-celled organism, blue-green algae, found in 3.2 billion year-old stones in South Africa.",
+        "The oldest multicellular fossils date from ~700 million years ago.",
+        "The earliest cockroach fossils are about 280 million years old.",
+        "Healthy nails grow about 2 cm each year. Fingernails grow four times as fast as toenails.",
+        "20/20 vision means the eye can see normally at 20 feet. 20/15 is better; the eye can see at 20 feet what another eye sees at 15 feet.",
+        "The average person has 100,000 hairs on his/her head. Each hair grows about 5 inches (12.7 cm) every year.",
+        "There are 60,000 miles (97,000 km) in blood vessels in every human.",
+        "If you lift a kangaroo’s tail off the ground it can’t hop.",
+        "Bananas are curved because they grow towards the sun.",
+        "Billy goats urinate on their own heads to smell more attractive to females.",
+        "The inventor of the Frisbee was cremated and made into a Frisbee after he died.",
+        "During your lifetime, you will produce enough saliva to fill two swimming pools.",
+        "If Pinocchio says “My Nose Will Grow Now”, it would cause a paradox.",
+        "Movie trailers were originally shown after the movie, which is why they were called “trailers”.",
+        "An eagle can kill a young deer and fly away with it.",
+        "Tennis players are not allowed to swear when they are playing in Wimbledon.",
+        "In 2017 more people were killed from injuries caused by taking a selfie than by shark attacks.",
+        "The top six foods that make your fart are beans, corn, bell peppers, cauliflower, cabbage and milk.",
+        "There is a species of spider called the Hobo Spider.",
+        "A lion’s roar can be heard from 5 miles away.",
+        "Saint Lucia is the only country in the world named after a woman.",
+        "A baby spider is called a spiderling.",
+        "The United States Navy has started using Xbox controllers for their periscopes.",
+        "The following can be read forward and backwards: Do geese see God?",
+        "A baby octopus is about the size of a flea when it is born.",
+        "A sheep, a duck and a rooster were the first passengers in a hot air balloon.",
+        "In Uganda, around 48percent of the population is under 15 years of age.",
+        "The average male gets bored of a shopping trip after 26 minutes.",
+        "In the 16th Century, Turkish women could initiate a divorce if their husbands didn’t pour coffee for them.",
+        "Recycling one glass jar saves enough energy to watch television for 3 hours.",
+        "After the premiere of “16 and Pregnant,” teen pregnancy rates dropped.",
+        "Approximately 10-20percent of U.S. power outages are caused by squirrels.",
+        "95percent of people text things they could never say in person.",
+        "Honeybees can recognize human faces.",
+        "While trying to find a cure for AIDS, the Mayo Clinic made glow in the dark cats.",
+        "A swarm of 20,000 bees followed a car for two days because their queen was stuck inside.",
+        "Nearly 3percent of the ice in Antarctic glaciers is penguin urine.",
+        "A crocodile can’t poke its tongue out.",
+        "Sea otters hold hands when they sleep so they don’t drift away from each other.",
+        "A small child could swim through the veins of a blue whale.",
+        "Bin Laden’s death was announced on 1st May 2011. Hitler’s death was announced on 1st May 1945.",
+        "There is a total of 1,710 steps in the Eiffel Tower.",
+        "The Pokémon Hitmonlee and Hitmonchan are based off of Bruce Lee and Jackie Chan.",
+        "A woman tried to commit suicide by jumping off the Empire State Building.\nShe jumped from the 86th floor but was blown back onto the 85th floor by a gust of wind.",
+        "Pirates wore earrings because they believed it improved their eyesight.",
+        "The Twitter bird actually has a name – Larry.",
+        "It snowed in the Sahara desert for 30 minutes on the 18th February 1979.",
+        "Mike Tyson once offered a zoo attendant 10,000 dollars to let him fight a gorilla.",
+        "There has never been a verified snow leopard attack on a human being.",
+        "The first alarm clock could only ring at 4 a.m.",
+        "An apple, potato, and onion all taste the same if you eat them with your nose plugged.",
+        "The average person walks the equivalent of five times around the world in their lifetime."
     ]
     formality = [
         'Here you go, ',
@@ -581,7 +626,7 @@ async def joke(ctx):
         "Q: How do trees access the internet?\nA: They log in.",
         "Q: What do you get when you cross a fish and an elephant?\nA: Swimming trunks.",
         'Q: What is the difference between a teacher and a train?\nA: One says, "Spit out your gum," and the other says, "Choo choo choo!"',
-        'Q. What do clouds do when they become rich?\nA. They make it rain!'
+        'Q. What do clouds do when they become rich?\nA. They make it rain!',
         'Q. What is the color of the wind?\nA. Blew.',
         "Q: Why shouldn't you write with a broken pencil?\nA: Because it’s pointless!"
     ]
@@ -815,15 +860,20 @@ async def flip(ctx):
 
 @client.command(aliases = ['roll', 'rolldice', 'diceroll'])
 async def dice(ctx):
-    outcomes = [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6"
-    ]
+    outcomes = range(1, 7)
     await ctx.send(f"""{ctx.author.mention} rolled {random.choice(outcomes)}""")
+
+@client.command()
+async def ran(ctx, number = 100):
+    list_possible_outcome = range(1, number + 1)
+    formality = [
+        'The random number is',
+        'Random ',
+        "On choosing a random, ",
+        'Random selection ',
+        'Random generated as '
+    ]
+    await ctx.send(f"""{ctx.author.mention} ,\n{random.choice(formality)}: {random.choice(list_possible_outcome)}""")
 
 @client.command(aliases = ['giggle', 'chuckle'])
 async def laugh(ctx):
@@ -914,36 +964,38 @@ async def on_message(message):
     
     if message.content == "!help":
         embed = discord.Embed(title = "Sanity_bot Command List", description = "Some useful commands (note that bot_prefix should lead the commands)", colour=discord.Colour.green())
-        embed.add_field(name = "hello", value = "Greets the user")
-        embed.add_field(name = "bye", value = "Bids the user goodbye")
-        embed.add_field(name = "users", value = "Display number of users")
-        embed.add_field(name = "kick @user", value = "Kicks the mentioned user from server")
-        embed.add_field(name = "ban @user", value = "Bans the mentioned user from server")
-        embed.add_field(name = "unban user_name#user_id", value = "Unbans the user if the user exists in banlist of server.")
-        embed.add_field(name = "roast @user", value = "Roasts the mentioned user")
-        embed.add_field(name = "funfact", value = "Provides a fun fact")
-        embed.add_field(name = "joke", value = "Provides a funny joke")
-        embed.add_field(name = "flip", value = "Flips a coin")
-        embed.add_field(name = "roll", value = "Rolls a dice")  
-        embed.add_field(name = "ping", value = "Displays the latency of the bot") 
-        embed.add_field(name = "connect", value = "Connects to a voice channel") 
-        embed.add_field(name = "haha", value = "Irony text for a bot cant haha") 
-        embed.add_field(name = "laugh", value = "Displays a laugh text") 
-        embed.add_field(name = "changeprefix new_prefix", value = "Changes the prefix of the bot for the server.") 
-        embed.add_field(name = "riddle", value = "Provides a Riddle")
-        embed.add_field(name = "twister", value = "Provides a tongue twister")
+        embed.add_field(name = "!hello", value = "Greets the user")
+        embed.add_field(name = "!bye", value = "Bids the user goodbye")
+        embed.add_field(name = "!users", value = "Display number of users")
+        embed.add_field(name = "!kick @user", value = "Kicks the mentioned user from server")
+        embed.add_field(name = "!ban @user", value = "Bans the mentioned user from server")
+        embed.add_field(name = "!unban user_name#user_id", value = "Unbans the user if the user exists in banlist of server.")
+        embed.add_field(name = "!roast @user", value = "Roasts the mentioned user")
+        embed.add_field(name = "!funfact", value = "Provides a fun fact")
+        embed.add_field(name = "!joke", value = "Provides a funny joke")
+        embed.add_field(name = "!flip", value = "Flips a coin")
+        embed.add_field(name = "!roll", value = "Rolls a dice")  
+        embed.add_field(name = "!ping", value = "Displays the latency of the bot") 
+        embed.add_field(name = "!connect", value = "Connects to a voice channel") 
+        embed.add_field(name = "!haha", value = "Irony text for a bot cant haha") 
+        embed.add_field(name = "!laugh", value = "Displays a laugh text") 
+        embed.add_field(name = "!changeprefix new_prefix", value = "Changes the prefix of the bot for the server.") 
+        embed.add_field(name = "!riddle", value = "Provides a Riddle")
+        embed.add_field(name = "!twister", value = "Provides a tongue twister")
+        embed.add_field(name = "!clear value", value = "Clears the number of message in the channel, 1 will be the default")
+        embed.add_field(name = "!ran value", value = "Creates a random number within giver value, 100 will be the default")
         await message.channel.send(content = None, embed = embed)
         embed_1 = discord.Embed(title = "", description = "Do not try to change nickname to mine (sanity ) And \n Do not use rough languages here please. Thankyou.", colour=discord.Colour.red())
         await message.channel.send(content = None, embed = embed_1)
         embed_2 = discord.Embed(title = "Multiple ways to call", description = "The commands have multiple ways of calling such as: ", colour=discord.Colour.green())
-        embed_2.add_field(name = "hello", value = "'hi', 'hey', 'hola', 'greetings','namaste', 'namaskar'", inline = False)
-        embed_2.add_field(name = "bye", value = "'adios', 'byebye','byeee', 'byee'", inline = False)
-        embed_2.add_field(name = "funfact", value = "'funfacts'", inline = False)
-        embed_2.add_field(name = "joke", value = "'jokes', 'fun', 'funny'", inline = False)
-        embed_2.add_field(name = "flip", value = "'coin', 'coinflip', 'flipcoin'", inline = False)
-        embed_2.add_field(name = "roll", value = "'dice', 'rolldice', 'diceroll'", inline = False)  
-        embed_2.add_field(name = "haha", value = "'hehe','hahaha','lol','rofl','lul','lel','lmao','hehehe'", inline = False) 
-        embed_2.add_field(name = "laugh", value = "'giggle', 'chuckle'", inline=False)
+        embed_2.add_field(name = "!hello", value = "'!hi', '!hey', '!hola', '!greetings','!namaste', '!namaskar'", inline = False)
+        embed_2.add_field(name = "!funfact", value = "'!funfacts'")
+        embed_2.add_field(name = "!joke", value = "'!jokes', '!fun', '!funny'")
+        embed_2.add_field(name = "!bye", value = "'!adios', '!byebye','!byeee', '!byee'", inline = False)
+        embed_2.add_field(name = "!flip", value = "'!coin', '!coinflip', '!flipcoin'",)
+        embed_2.add_field(name = "!roll", value = "'!dice', '!rolldice', '!diceroll'")  
+        embed_2.add_field(name = "!haha", value = "'!hehe','!hahaha','!lol','!rofl','!lul','!lel','!lmao','!hehehe'", inline = False) 
+        embed_2.add_field(name = "!laugh", value = "'!giggle', '!chuckle'", inline=False)
         await message.channel.send(content = None, embed = embed_2)
     await client.process_commands(message)
 
