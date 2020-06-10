@@ -29,6 +29,7 @@ I have tried to make this bot a fully flexible and very much similar to the bots
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 I created every command for the bot myself with the motivation of why not make my own full fledge bot.
+The discord bots are added to a server and my bot gives 20! command features and 
 
 ----------------------------------------------------------------------------------------------------------------------------------------
                                            Commands and Moderation Features of the bot
