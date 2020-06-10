@@ -1,1 +1,1 @@
-(Displaying token might make my project stealable so i removed it for now)
+(Displaying token might make my bot to be misused so i removed it for now)
