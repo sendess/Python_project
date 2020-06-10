@@ -1,26 +1,28 @@
-import discord
-import random
-import datetime
-import asyncio
-import json
-import youtube_dl
-from discord.ext import commands, tasks
-from discord import Game
-from itertools import cycle
-from youtube_dl import YoutubeDL
+# I have commented throughout the code as things might get little confusing while reading other's code
+# cuz I feel so when i read other's code . :D
 
-BOT_PREFIX = '!'
-message = joined = 0
+import discord                                 # imported as the main module discord.py for the python project
+import random                                  # imported for choosing random within the list of possible outputs
+import datetime                                # imported for logging date and time in stats.txt file
+import asyncio                                 # imported for all the asynchronous function used in the code
+import json                                    # imported for working json file in bot prefix load and update
+import youtube_dl                              # imported for bot to have music usage but detained 
+from discord.ext import commands, tasks        # used for commands and auto update tasks  
+from discord import Game                       # used previously for bot status
+from itertools import cycle                    # used to cycle between the status of the bot which updates every 30 sec
+from youtube_dl import YoutubeDL               # imported for bot to have music usage but detained due to complexities
+
+BOT_PREFIX = '!'     
 messages = joined = 0
-players = {}
+players = {}    # was defined for the music player to have a song queue but detained 
 
-def read_token():
-    with open("token.txt", 'r') as f:
+def read_token():  # important function for reading the token of the bot compulsory for bot to operate
+    with open("token.txt", 'r') as f:           # opening file in read mode for reading token of my bot
         lines = f.readlines()
         return lines[0].strip()
 token = read_token()
 
-def get_prefix(client, message):
+def get_prefix(client, message):               # gets bot's prefix from the json file
     with open('prefixes.json', 'r') as f:
         prefixes = json.load(f)
     return prefixes[str(message.guild.id)]
@@ -28,7 +30,7 @@ def get_prefix(client, message):
 client = commands.Bot(command_prefix = get_prefix)
 
 @client.event
-async def on_guild_join(guild):
+async def on_guild_join(guild):               # on joining the guild(server) , the bot initializes its prefix to ! for each server recorded in json file prefixes.json
     global BOT_PREFIX
     BOT_PREFIX = "!"
     with open('prefixes.json', 'r') as f:
@@ -38,7 +40,7 @@ async def on_guild_join(guild):
         json.dump(prefixes, f, indent = 4)
 
 @client.event
-async def on_guild_remove(guild):
+async def on_guild_remove(guild):             # on leaving a server the bot deletes the preix for specific server from json file prefixes.json
     with open('prefixes.json', 'r') as f:
         prefixes = json.load(f)
 
@@ -48,8 +50,8 @@ async def on_guild_remove(guild):
         json.dump(prefixes, f, indent = 4)
 
 @client.command()
-@commands.has_permissions(administrator = True)
-async def changeprefix(ctx, prefix):
+@commands.has_permissions(administrator = True)               # only accessible by users having administrative privilage 
+async def changeprefix(ctx, prefix):                          # on this command thebot's orefix is changed and updated to json file prefixes.json for each individual server 
     global BOT_PREFIX
     BOT_PREFIX = prefix
     with open('prefixes.json', 'r') as f:
@@ -60,8 +62,8 @@ async def changeprefix(ctx, prefix):
     await ctx.send(f"""My prefix was successfully changed to '{prefix}'""")
     print(f"""{ctx.author} changed the bot prefix to {prefix}""")
 
-statuses = cycle([ 
-    f"for {BOT_PREFIX}help",
+statuses = cycle([                                              # list for status of bot in the server . 
+    f"for {BOT_PREFIX}help",                                    # updates on the bot status
     "on my own",
     f"for {BOT_PREFIX}help",
     " you",
@@ -73,12 +75,12 @@ statuses = cycle([
     " everything!!"
 ])
 
-async def update_stats():
-    await client.wait_until_ready()
+async def update_stats():                                           # function to log the amount of message sent to server  and members joined with time.
+    await client.wait_until_ready()                                 # logs in stats.txt every 1 hour
     global messages, joined
     id = client.get_guild(712150647704649748)
     while not client.is_closed():
-        try:
+        try:                                                        
             with open("stats.txt", "a+") as f:
                 f.write(f"Time: {datetime.datetime.utcnow()}, Messages:  {messages} , New Members Joined: {joined} , Total Members count = {id.member_count} \n")
             messages = 0 
@@ -90,9 +92,9 @@ async def update_stats():
             await asyncio.sleep(3600)
 
 
-@client.event 
-async def on_member_update(before, after): 
-    n = after.nick 
+@client.event                                                          # function that triggers on event
+async def on_member_update(before, after):                             # when nickname is changed
+    n = after.nick                                                     # nickname cant be changed to sanity
     if n: 
        if n.lower().count("sanity") > 0: 
             last = before.nick
@@ -116,8 +118,8 @@ async def change_status():
     #await client.change_presence(status = discord.Status.idle, activity = discord.Streaming(next(status)))
 
 
-@client.event
-async def on_member_join(member):
+@client.event                                                           # function that triggers on event
+async def on_member_join(member):                                       # when member joins a server
     global joined
     joined += 1
     for channel in member.guild.channels:
@@ -125,16 +127,16 @@ async def on_member_join(member):
             await channel.send(f"""Welcome {member.mention}""")
     print(f"""Member, {member}, entered the server.""")
 
-@client.event
-async def on_member_remove(member):
+@client.event                                                           # function that triggers on event
+async def on_member_remove(member):                                     # when member leaves/ is rmoved from server
     for channel in member.guild.channels:
         if str(channel) == "general":
             await channel.send(f"""{member.mention} has left the server""")
     print(f"""Member, {member}, left the server.""")
     
 
-@client.command(aliases = ['hi', 'hey', 'hola', 'greetings','namaste', 'namaskar'])
-async def hello(ctx):
+@client.command(aliases = ['hi', 'hey', 'hola', 'greetings','namaste', 'namaskar'])    # function that triggers on command
+async def hello(ctx):                                                                  # when a user sends hi command
     possible_responses = [
         'Hey there!! ',
         'Hi ',
@@ -148,8 +150,8 @@ async def hello(ctx):
     print(f"""User, {ctx.author}, greeted.""")
 
 
-@client.command(aliases = ['adios', 'byebye','byeee', 'byee'])
-async def bye(ctx):
+@client.command(aliases = ['adios', 'byebye','byeee', 'byee'])                     # function that triggers on command
+async def bye(ctx):                                                                # when a user sends bye command     
     possible_responses = [
         "Please stay with me. :'( ", 
         'Everyone must go one day, Byee',
@@ -164,8 +166,8 @@ async def bye(ctx):
     print(f"""User, {ctx.author}, bid goodbye.""")
 
 
-@client.command(aliases = ['hehe','hahaha','lol','rofl','lul','lel','lmao','hehehe'])
-async def haha(ctx):
+@client.command(aliases = ['hehe','hahaha','lol','rofl','lul','lel','lmao','hehehe'])      # function that triggers on command
+async def haha(ctx):                                                                       # when a user sends haha command
     possible_response = [
         'Haha somethings was funny, I missed it though.',
         'I wish I could laugh as you do, But i feel nothing.',
@@ -176,8 +178,8 @@ async def haha(ctx):
 
 
 
-@client.command()
-async def ping(ctx):
+@client.command()                                                                    # function that triggers on command
+async def ping(ctx):                                                                 # when a user sends ping command
     possible_responses = [
         'Pong!!',
         'Ping what?? ',
@@ -192,8 +194,8 @@ async def ping(ctx):
         await ctx.send(response + f"""  Just kidding , ping is = {round(client.latency * 1000)} ms.""")
     print(f"""User, {ctx.author}, checked ping to be {round(client.latency * 1000)}.""")
 
-@client.command()
-async def connect(ctx, *, channel: discord.VoiceChannel = None):
+@client.command()                                                                     # function that triggers on command
+async def connect(ctx, *, channel: discord.VoiceChannel = None):                      # when a user sends connect command
     if not channel:
         channel = ctx.author.voice.channel
     vc = ctx.voice_client
@@ -212,8 +214,8 @@ async def connect(ctx, *, channel: discord.VoiceChannel = None):
 #     voice_client = guild.voice_client
 #     await voice_client.disconnect()
 
-@commands.command()
-async def leave(ctx):
+@commands.command()                                                                   # function that triggers on command
+async def leave(ctx):                                                                 # when a user sends leave command
     vc = ctx.voice_client
     
     if not vc or not vc.is_connected():
@@ -223,7 +225,7 @@ async def leave(ctx):
         await channel.disconnect()
 
 
-# @client.command()
+# @client.command()                                                                     # not working atm voice channel music purpose
 # async def play (ctx, *, url):
 #     connect(ctx)
 #     url = "https://www.youtube.com/results?search_query=" + url
@@ -234,7 +236,7 @@ async def leave(ctx):
 #     player.start()
 
 
-# @commands.command()
+# @commands.command()                                                                    # not working atm voice channel music purpose
 # async def play(ctx, *, search: str):
 #     await ctx.trigger_typing()
 #     bot = ctx.bot
@@ -250,8 +252,8 @@ async def leave(ctx):
 #     await player.queue.put(source)
 
 
-@client.command()
-async def ask(ctx, *, question):
+@client.command()                                                                           # function that triggers on command
+async def ask(ctx, *, question):                                                            # when a user sends ask command
     reply = [
         'It is certain.',
         'It is decidedly so.',
@@ -279,9 +281,10 @@ async def ask(ctx, *, question):
     await ctx.send(f"""Question: {question}\n Answer: {random.choice(reply)}""")
     print(f"""User, {ctx.author}, asked a question.""")
 
-@client.command()
-async def roast(ctx, *, member):
-    roasts = ["My phone battery lasts longer than your business.",
+@client.command()                                                                           # function that triggers on command
+async def roast(ctx, *, member):                                                            # when a user sends roast command
+    roasts = [
+        "My phone battery lasts longer than your business.",
         "Oh you’re talking to me, I thought you only talked behind my back.",
         "My name must taste good because it’s always in your mouth.", 
         "Don’t you get tired of putting make up on two faces every morning?",
@@ -353,12 +356,12 @@ async def roast(ctx, *, member):
         'Anyone said roast? ,'
     ]
 
-    await ctx.send(f"""{random.choice(formality)} \n {random.choice(roasts)}""")
+    await ctx.send(f"""{random.choice(formality)} {member} \n {random.choice(roasts)}""")
     print(f"""User, {ctx.author}, roasted {member}.""")
 
 
-@client.command(aliases = ['funfacts'])
-async def funfact(ctx):
+@client.command(aliases = ['funfacts'])                                                                     # function that triggers on command
+async def funfact(ctx):                                                                                     # when a user sends funfact command
     fun_facts = [
         "Babies have around 100 more bones than adults",
         "The Eiffel Tower can be 15 cm taller during the summer",
@@ -584,8 +587,8 @@ async def funfact(ctx):
     print(f"""User, {ctx.author}, asked for a fun fact.""")
 
 
-@client.command(aliases = ['jokes', 'fun', 'funny'])
-async def joke(ctx):
+@client.command(aliases = ['jokes', 'fun', 'funny'])                                            # function that triggers on command
+async def joke(ctx):                                                                            # when a user sends joke command
     jokes_list = [
         'Teacher: "Kids, what does the chicken give you?"\nStudent: "Meat!"\nTeacher: "Very good! Now what does the pig give you?"\nStudent: "Bacon!"\nTeacher: "Great! And what does the fat cow give you?"\nStudent: "Homework!"',
         'A child asked his father, "How were people born?" So his father said, "Adam and Eve made babies, then their babies became adults and made babies, and so on." The child then went to his mother, asked her the same question and she told him, "We were monkeys then we evolved to become like we are now." The child ran back to his father and said, "You lied to me!" His father replied, "No, your mom was talking about her side of the family',
@@ -657,9 +660,9 @@ async def joke(ctx):
     await ctx.send(f"""{random.choice(formality)} \n\n {random.choice(jokes_list)}""")
     print(f"""User, {ctx.author}, asked for a joke.""")
 
-@client.command(alaises = ['riddles'])
-async def riddle(ctx):
-    riddles_list =[
+@client.command(alaises = ['riddles'])                                                          # function that triggers on command
+async def riddle(ctx):                                                                          # when a user sends riddle command
+    riddles_list =[ 
         "Riddle: What has to be broken before you can use it?\nAnswer: An egg",
         "Riddle: I’m tall when I’m young, and I’m short when I’m old. What am I?\nAnswer: A candle",
         "Riddle: What month of the year has 28 days?\nAnswer: All of them",
@@ -773,8 +776,8 @@ async def riddle(ctx):
     print(f"""User, {ctx.author}, asked for a riddle.""")
 
 
-@client.command()
-async def twister(ctx):
+@client.command()                                                                   # function that triggers on command
+async def twister(ctx):                                                             # when a user sends twister command
     twisters_list = [
         "Peter Piper picked a peck of pickled peppers\nA peck of pickled peppers Peter Piper picked\nIf Peter Piper picked a peck of pickled peppers\nWhere’s the peck of pickled peppers Peter Piper picked?",
         "Betty Botter bought some butter\nBut she said the butter’s bitter\nIf I put it in my batter, it will make my batter bitter\nBut a bit of better butter will make my batter better\nSo ‘twas better Betty Botter bought a bit of better butter",
@@ -872,8 +875,8 @@ async def twister(ctx):
     print(f"""User, {ctx.author}, asked for a tongue twister.""")
 
 
-@client.command(aliases = ['coin', 'coinflip', 'flipcoin'])
-async def flip(ctx):
+@client.command(aliases = ['coin', 'coinflip', 'flipcoin'])                                                     # function that triggers on command
+async def flip(ctx):                                                                                            # when user sends flip command
     outcomes = [
         "HEADS",
         "TAILS"
@@ -883,15 +886,15 @@ async def flip(ctx):
     print(f"""User, {ctx.author}, flipped {selection}.""")
 
 
-@client.command(aliases = ['roll', 'rolldice', 'diceroll'])
-async def dice(ctx):
+@client.command(aliases = ['roll', 'rolldice', 'diceroll'])                                                    # function that triggers on command
+async def dice(ctx):                                                                                            # when user sends roll command
     outcomes = range(1, 7)
     selection = random.choice(outcomes)
     await ctx.send(f"""{ctx.author.mention} rolled {selection}""")
     print(f"""User, {ctx.author}, rolled {selection}.""")
 
-@client.command()
-async def ran(ctx, number = 100):
+@client.command()                                                                                                # function that triggers on command
+async def ran(ctx, number = 100):                                                                                # when user sends ran command
     list_possible_outcome = range(1, number + 1)
     formality = [
         'The random number is',
@@ -904,8 +907,8 @@ async def ran(ctx, number = 100):
     await ctx.send(f"""{ctx.author.mention} ,\n{random.choice(formality)}: {selection}""")
     print(f"""User, {ctx.author}, randomed {selection}.""")
 
-@client.command(aliases = ['giggle', 'chuckle'])
-async def laugh(ctx):
+@client.command(aliases = ['giggle', 'chuckle'])                                                                # function that triggers on command
+async def laugh(ctx):                                                                                            # when user sends laugh command
     laugh_patterns = [
         'Hahahahhahahahahahahaa',
         'Aaaahahhahahahahaa',
@@ -922,28 +925,28 @@ async def laugh(ctx):
     await ctx.send(f"""{random.choice(laugh_patterns)} {random.choice(tail)}""")
     print(f"""User, {ctx.author}, asked to laugh.""")
 
-@client.command()
-@commands.has_permissions(manage_messages = True)
+@client.command()                                                                                                 # function that triggers on command
+@commands.has_permissions(manage_messages = True)                                                                 # when user sends clear value command, clears specified number of text  but only for users with permission to do so
 async def clear(ctx, amount = 1):
     await ctx.channel.purge(limit = amount + 1)
     print(f"""User, {ctx.author}, cleared {amount} messages.""")
 
-@client.command()
-@commands.has_permissions(kick_members = True)  
+@client.command()                                                                                                   # function that triggers on command
+@commands.has_permissions(kick_members = True)                                                                      # when user sends kick @user command, kicks specied user from server but only for users with permission to do so
 async def kick(ctx, member : discord.Member, *, reason = None):
     await member.kick(reason = reason)
     await ctx.send(f"""{member.mention} was kicked by {ctx.author}. \n Reason: {reason}""")
     print(f"""{ctx.author} kicked {member}. Reason: {reason}""")
 
-@client.command()
-@commands.has_permissions(ban_members = True)
+@client.command()                                                                                                         # function that triggers on command
+@commands.has_permissions(ban_members = True)                                                                             # when user sends ban @user command, bans specied user from server but only for users with permission to do so
 async def ban(ctx, member : discord.Member, *, reason = None):
     await member.ban(reason = reason)
     await ctx.send(f"""{member.mention} was banned by {ctx.author}. \n Reason: {reason}""")
     print(f"""{ctx.author} banned {member}. Reason: {reason}""")
 
-@client.command()
-@commands.has_permissions(ban_members = True)
+@client.command()                                                                                                 # function that triggers on command
+@commands.has_permissions(ban_members = True)                                                                     # when user sends unban user#id command, unbans specied user from server but only for users with permission to do so
 async def unban(ctx, *, member):
     banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
@@ -954,8 +957,8 @@ async def unban(ctx, *, member):
             await ctx.send(f"""Unbanned {user.name}#{user.discriminator}""")
             return
 
-@client.command()
-async def users(ctx):
+@client.command()                                                                                                    # function that triggers on command
+async def users(ctx):                                                                                                # when user sends users command, gives count from server
     formality = [
         'The total number of members in this server ',
         'In total the number of users here is ',
@@ -965,20 +968,20 @@ async def users(ctx):
     await ctx.send(f"""{random.choice(formality)} = {ctx.guild.member_count}""")
     print(f"""{ctx.author} checked user count to be {ctx.guild.member_count}""")
 
-@client.remove_command("help")
+@client.remove_command("help")                                                                                     # removing the default help command of bot
 
-@client.command()
+@client.command()                                                                                                    # function that triggers on command
 async def help(ctx):
     print(f"""{ctx.author} called for help.""")
 
-@client.event
-async def on_message(message):
+@client.event                                                                                                    # function that triggers on event
+async def on_message(message):                                                                                   # event that user sends any message to the  server
     global messages
     messages += 1
     id = client.get_guild(712150647704649748)
     bad_words = ["nigga", "nigger", "shit", "crap", "fuck", "nonce", "bellend", "dick", "dickhead", "fucker" , "mampakha", "muji", "laude", "madarchod", "gandu", "randi"]
     
-    for word in bad_words:
+    for word in bad_words:                                                                                               # for removing bad words if sent by any user
         word = word.lower()
         if message.content.count(word) > 0:
             print(f"""A bad word was said by {message.author}""")
@@ -987,7 +990,7 @@ async def on_message(message):
             await message.channel.send(content=None, embed=embed)
             await message.channel.send(f"""Removed a bad line used by {message.author.mention}.\n Warning !!!!!! dont repeat, Peace!!!""")
     
-    if message.content == "!help":
+    if message.content == "!help":                                                                                      # for help panel for usser calling for help
         embed = discord.Embed(title = "Sanity_bot Command List", description = "Some useful commands (note that bot_prefix should lead the commands)", colour=discord.Colour.green())
         embed.add_field(name = "!hello", value = "Greets the user")
         embed.add_field(name = "!bye", value = "Bids the user goodbye")
