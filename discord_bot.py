@@ -979,7 +979,7 @@ async def on_message(message):                                                  
     global messages
     messages += 1
     id = client.get_guild(712150647704649748)
-    bad_words = ["nigga", "nigger", "shit", "crap", "fuck", "nonce", "bellend", "dick", "dickhead", "fucker" , "mampakha", "muji", "laude", "madarchod", "gandu", "randi"]
+    bad_words = ["shit", "crap", "nigga", "nigger]
     
     for word in bad_words:                                                                                               # for removing bad words if sent by any user
         word = word.lower()
