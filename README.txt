@@ -92,4 +92,5 @@ provides a riddle on command !riddle
 provides a tongue twister on the command !twister
 
 provides a random value on command !ran value,    where the value has default 100 (i.e. random number is chosen from within 1 and value)
-
+NOTE:
+If the token for your bot is mistakenly posted in any github profile, discord detects it and then changes your token automatically!!!!!
